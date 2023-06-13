@@ -1,0 +1,27 @@
+footer {
+    /* background: rgb(37, 55, 70); */
+    background: #336CFB;
+    height: 30px;
+    padding: 6px;
+    color: white;
+}
+
+.footer-text {
+    margin: 0px;
+}
+
+.online {
+    background: green;
+    display: inline-block;
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+}
+
+.offline {
+    background: red;
+    display: inline-block;
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+}

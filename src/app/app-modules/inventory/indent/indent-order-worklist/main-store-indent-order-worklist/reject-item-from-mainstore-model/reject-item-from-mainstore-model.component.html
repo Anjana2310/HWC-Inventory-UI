@@ -1,0 +1,17 @@
+<div class="title">
+  <h4>{{currentLanguageSet?.inventory?.reasonForReject}}</h4>
+  <button md-icon-button mdDialogClose tooltip="{{currentLanguageSet?.inventory?.close}}" class="pull-right exit width-20px">
+    <md-icon>close</md-icon>
+  </button>
+</div>
+<form [formGroup]="rejectRequestForm" autocomplete="off">
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 m-t-20">
+    <md-form-field [style.width]=" '100%' ">
+      <input required="true" mdInput placeholder="{{currentLanguageSet?.inventory?.reason}}" allowText="alphanumericspace" maxlength="250" formControlName="rejectReason">
+    </md-form-field>
+  </div>
+</form>
+<div class="col-xs-12">
+  <button class="pull-right" md-raised-button color="primary" tabindex="-1" type="button" [disabled]="rejectRequestForm.invalid"
+    (click)="rejectIndentRequest()">{{currentLanguageSet?.common?.ok}}</button>
+</div>

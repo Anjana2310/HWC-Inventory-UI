@@ -1,0 +1,47 @@
+<app-header [showRoles]="true"></app-header>
+
+<div class="container-fluid">
+  <button md-mini-fab class="example-fab" color="primary" (click)="sideNavModeChange(sidenav)">
+    <md-icon>account_box</md-icon>
+  </button>
+
+  <md-sidenav-container class="example-sidenav-fab-container">
+    <md-sidenav class="sideNav" #sidenav mode="side" opened="true">
+      <div class="example-scrolling-content sidenav">
+        <app-beneficiary-details></app-beneficiary-details>
+      </div>
+    </md-sidenav>
+    <div [ngClass]="sidenav._opened == true ? 'example-scrolling-content content' : 'example-scrolling-content contentNav'">
+      <div class="container-fluid">
+        <div class="row">
+          <md-radio-group [(ngModel)]="issueType" class="radio-group pull-left" style="margin-left: 15px;">
+            <md-radio-button class="radio-button m-a-5" disableRipple="true" color="primary" value="1">
+              {{currentLanguageSet?.itemDispense?.systemIssue}}
+            </md-radio-button>
+            <md-radio-button class="radio-button m-a-5" disableRipple="true" color="primary" value="0">
+              {{currentLanguageSet?.itemDispense?.manualIssue}}
+            </md-radio-button>
+          </md-radio-group>
+          <button md-raised-button *ngIf="issueType == 1 && 
+          !prescribedList?.allocated" class="btn-green pull-right" id="allocate-batch"
+            color='accent' style="color:white" (click)="prescribedList.allocate()" type="button">{{currentLanguageSet?.inventory?.allocateBatch}}</button>
+
+
+        </div>
+        <div class="row m-t-20" *ngIf="prescription">
+          <md-accordion>
+            <app-rx-item-dispense #prescribedList [issueType]="issueType" [prescription]="prescription"></app-rx-item-dispense>
+          </md-accordion>
+        </div>
+      </div>
+      <div class="row m-t-20" style="margin-bottom:30px;">
+        <div class="col-sm-12 step-btn actionButton">
+          <button md-raised-button id="submitButton" class="btn-green" (click)="submitForm(prescribedList.prescriptionForm)"
+            type="button" class="full-width-login background-overall">{{currentLanguageSet?.common?.submit}}</button>
+        </div>
+      </div>
+    </div>
+  </md-sidenav-container>
+</div>
+
+<app-footer></app-footer>

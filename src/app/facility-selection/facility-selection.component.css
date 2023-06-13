@@ -1,0 +1,30 @@
+.radio-btn {
+    margin-left: 8px;
+}
+
+.m-t-25 {
+    margin-top: 25px;
+}
+
+.m-t-10 {
+    margin-top: 10px;
+}
+
+.submit{
+    top: 10px;
+}
+
+.button-disabled[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+.mdTitle {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+h4 {
+    font-weight: bold;
+    color: #52575C !important;
+}

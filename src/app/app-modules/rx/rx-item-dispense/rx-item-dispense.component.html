@@ -1,0 +1,139 @@
+<section [formGroup]='prescriptionForm'>
+  <md-expansion-panel class="mdPanel" expanded="true">
+    <md-expansion-panel-header>
+      <span>
+        <strong>{{currentLanguageSet?.itemDispense?.prescriptionID}}:</strong>
+        {{prescriptionForm.value.prescriptionID}}
+      </span>
+      <span class="m-l-10 m-r-10">|</span>
+      <span> <strong>{{currentLanguageSet?.itemDispense?.visitcode}}: </strong>
+        {{prescriptionForm.value.visitCode}}
+      </span> <span class="m-l-10 m-r-10">|</span>
+      <span>
+        <strong>
+          {{currentLanguageSet?.itemDispense?.consultantName}}:
+        </strong>
+        {{prescriptionForm.value.consultantName}}
+      </span>
+    </md-expansion-panel-header>
+    <div class="container-fluid p-a-0 row" *ngIf="prescriptionForm.controls['itemList']['controls'].length == 0">
+      <legend class="text-center m-t-20">{{currentLanguageSet?.inventory?.noMedicalitemstoDisptach}}</legend>
+    </div>
+    <div class="container-fluid p-a-0">
+      <div formArrayName="itemList">
+        <section *ngFor="let drug of prescriptionForm.controls['itemList']['controls']; let drugIndex = index;">
+          <ng-container [formGroupName]="drugIndex">
+            <fieldset class="m-t-20 m-b-20 fieldset">
+              <legend>{{drug.value.genericDrugName}} {{drug.value.drugStrength}}</legend>
+              <div class="row">
+                  <div class="col-md-1 right-padding-remove-desktop ">
+                      <md-form-field class="input-full-width">
+                        <input autocomplete="off" readonly="true" type="text" mdInput formControlName="drugForm"
+                          placeholder="{{currentLanguageSet?.itemDispense?.form}}">
+                      </md-form-field>
+                    </div>
+                <div class="col-md-2">
+                  <md-form-field class="input-full-width">
+                    <input autocomplete="off" readonly="true" type="text" mdInput formControlName="durationView"
+                      placeholder="{{currentLanguageSet?.itemDispense?.duration}}">
+                  </md-form-field>
+                </div>
+                <div class="col-md-2 left-padding-remove-desktop right-padding-remove-desktop">
+                  <md-form-field class="input-full-width">
+                    <input autocomplete="off" readonly="true" type="text" mdInput formControlName="frequency"
+                      placeholder="{{currentLanguageSet?.itemDispense?.frequency}}">
+                  </md-form-field>
+                </div>
+                <div class="col-md-2">
+                  <md-form-field class="input-full-width">
+                    <input autocomplete="off" readonly="true" type="text" mdInput formControlName="dose" placeholder="{{currentLanguageSet?.itemDispense?.dose}}">
+                  </md-form-field>
+                </div>
+                <div class="col-md-2">
+                  <md-form-field class="input-full-width">
+                    <input autocomplete="off" readonly="true" type="text" mdInput formControlName="qtyPrescribed"
+                      placeholder="{{currentLanguageSet?.itemDispense?.quantityPrescribed}}">
+                  </md-form-field>
+                </div>
+                <div class="col-md-3">
+                  <md-form-field class="input-full-width">
+                    <input autocomplete="off" readonly="true" type="text" mdInput allowText="number"
+                      formControlName="qtyDispensed" placeholder="{{currentLanguageSet?.itemDispense?.quantityDispensed}}" [allowMax]="drug.value.qtyPrescribed">
+                  </md-form-field>
+                </div>
+                <div class="col-md-4 right-padding-remove-desktop">
+                  <md-form-field class="input-full-width">
+                    <input autocomplete="off" readonly="true" type="text" mdInput formControlName="route" placeholder="{{currentLanguageSet?.itemDispense?.route}}">
+                  </md-form-field>
+                </div>
+                <div [ngClass]="{'col-md-6': issueType == 0 || allocated == true, 'col-md-8': issueType == 1 && allocated == false }">
+                  <md-form-field class="input-full-width ">
+                    <input autocomplete="off" type="text" mdInput [readonly]="true" formControlName="specialInstruction" placeholder="{{currentLanguageSet?.itemDispense?.specialInstructions}}">
+                  </md-form-field>
+                </div>
+                <div class="col-md-2">
+                  <button md-raised-button *ngIf="issueType == 0" class="selectButton" color="primary" style="color:white; padding: 3px;"
+                    type="button" (click)="batchViewModal(drugIndex)">{{currentLanguageSet?.itemDispense?.selectBatch}}</button>
+                  <button md-raised-button *ngIf="allocated" class="selectButton" color="primary" style="color:white; padding: 5px;"
+                    type="button" (click)="batchViewModal(drugIndex)">{{currentLanguageSet?.itemDispense?.viewBatch}}</button>
+
+                </div>
+              </div>
+              <!-- {{drug.value | json}} -->
+            </fieldset>
+          </ng-container>
+        </section>
+      </div>
+
+    </div>
+  </md-expansion-panel>
+</section>
+
+<section *ngIf="copyprescription.itemList.length > 0 ">
+  <md-expansion-panel class="mdPanel">
+    <md-expansion-panel-header>
+      <span> <strong>{{currentLanguageSet?.inventory?.nonEDLMedicalRecords}}</strong></span>
+      <span class="m-l-10 m-r-10"></span>    
+    </md-expansion-panel-header>
+    <div class="container-fluid p-a-0">
+      <div>      
+          <ng-container>
+            <section class="m-t-20 overflow table-responsive" *ngIf="copyprescription.itemList.length > 0 ">
+              <table class="table table-responsive table-bordered" aria-describedby="itemDispenseDetails">
+                <caption></caption>  <!-- Table discription added SonarQube Fix -->
+                <thead>
+                  <tr>
+                    <th id="sNo" class="width5">{{currentLanguageSet?.inventory?.sNo}}</th>
+                    <th id="medicineName" class="width10">{{currentLanguageSet?.inventory?.medicineName}}</th>
+                    <th id="form" class="width10">{{currentLanguageSet?.itemDispense?.form}}</th>
+                    <th id="duration" class="width10">{{currentLanguageSet?.itemDispense?.duration}}</th>
+                    <th id="frequency" class="width10">{{currentLanguageSet?.itemDispense?.frequency}}</th>
+                    <th id="dose" class="width10">{{currentLanguageSet?.itemDispense?.dose}}</th>
+                    <th id="quantityPrescribed" class="width10">{{currentLanguageSet?.itemDispense?.quantityPrescribed}}</th>
+                    <th id="route" class="width10">{{currentLanguageSet?.itemDispense?.route}}</th>
+                    <th id="specialInstructions" class="width20">{{currentLanguageSet?.itemDispense?.specialInstructions}}</th>
+                  </tr>
+                </thead>    
+                  <tbody *ngIf="copyprescription.itemList?.length > 0">
+                    <ng-container *ngFor="let test of copyprescription.itemList; let i = index">         
+                      <tr >
+                        <td style="width:300px;max-width:120px; word-break: normal; vertical-align:middle">{{i+1}}</td>
+                        <td style="width:300px;max-width:120px; word-break: normal; vertical-align:middle">{{test?.genericDrugName}} {{test?.drugStrength}}</td>
+                        <td style="width:300px;max-width:120px; word-break: normal; vertical-align:middle">{{test?.drugForm}}</td>
+                        <td style="width:110px; word-break: normal; vertical-align:middle ">{{test?.duration}} {{test?.durationUnit}}</td>
+                        <td style="width:150px; word-break: normal; vertical-align:middle">{{test?.frequency}}</td>
+                        <td style="max-width:150px; word-break: normal; vertical-align:middle">{{test?.dose }}</td>
+                        <td style="max-width:150px; word-break: normal; vertical-align:middle">{{test?.qtyPrescribed }}</td>
+                        <td style="max-width:150px; word-break: normal; vertical-align:middle">{{test?.route }}</td>
+                        <td style="max-width:150px; word-break: normal; vertical-align:middle">{{test?.specialInstruction }}</td>
+                      </tr>
+                    </ng-container>
+                  </tbody>     
+              </table>
+            </section>
+          </ng-container>
+      </div>
+
+    </div>
+  </md-expansion-panel>
+</section>

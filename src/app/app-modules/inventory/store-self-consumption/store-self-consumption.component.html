@@ -1,0 +1,105 @@
+<div class="container-fluid">
+  <form [formGroup]="storeSelfConsumptionForm" autocomplete="off" novalidate>
+
+    <div class="row m-t-10">
+      <div class="col-xs-12 col-sm-6">
+        <h4>{{currentLanguageSet?.inventory?.storeConsumption}}</h4>
+      </div>
+
+      <div class="col-xs-12 col-sm-6">
+        <button md-raised-button class="pull-right button-full-width" type="button" color="primary" routerLink="View">{{currentLanguageSet?.inventory?.previousRecords}}</button>
+      </div>
+    </div>
+
+    <div class="row m-t-10">
+      <div class="col-xs-12 col-sm-4 col-md-4 col-lg-3">
+        <md-form-field class="input-full-width">
+          <input mdInput required allowText="alphanumeric" maxlength="20" name="referenceNumber" formControlName="referenceNumber"
+            placeholder="{{currentLanguageSet?.inventory?.referenceNumber}}" #referenceNumber>
+        </md-form-field>
+        <md-hint>
+          <span class="error_text" *ngIf="!referenceNumber.valid  && ( referenceNumber.dirty || referenceNumber.touched)">{{currentLanguageSet?.inventory?.pleaseenterReferenceNumber}}</span>
+        </md-hint>
+      </div>
+      <div class="col-xs-12 col-sm-4 col-md-4 col-lg-3">
+        <md-form-field class="input-full-width">
+          <input mdInput required allowText="alphanumericspace" maxlength="100" name="dispenseReason" formControlName="dispenseReason"
+            placeholder="{{currentLanguageSet?.inventory?.consumptionReason}}">
+        </md-form-field>
+      </div>
+    </div>
+
+    <div class="row m-t-10">
+      <div class="col-xs-12">
+        <md-card>
+          <div class="table-responsive">
+            <table class="table table-striped table responsive-table-form" aria-describedby="storeSelfDetails">
+              <caption></caption> <!-- Table discription added SonarQube Fix -->
+              <thead>
+                <tr>
+                  <th class="width5" id="noValue"></th>
+                  <th class="width20" id="itemName">{{currentLanguageSet?.inventory?.itemName}}</th>
+                  <th class="width20" id="batchNo">{{currentLanguageSet?.itemDispense?.batchNo}}</th>
+                  <th class="width15" id="qOH">{{currentLanguageSet?.inventory?.qOH}}</th>
+                  <th class="width10" id="quantity">{{currentLanguageSet?.inventory?.quantity}}</th>
+                  <th class="width10" id="empyID"></th>
+                </tr>
+              </thead>
+              <tbody formArrayName="dispensedStock">
+                <ng-container *ngFor="let stock of storeSelfConsumptionForm.controls['dispensedStock']['controls']; let i = index; let isLast=last;">
+                  <tr [formGroupName]="i">
+                    <td class="vertical-align-middle"> {{ i+1 }} </td>
+                    <td>
+                      <md-form-field class="input-full-width">
+                        <input mdInput allowText = "itemNameSearchValidator" placeholder="{{currentLanguageSet?.inventory?.itemName}}" maxlength="100" appBatchSearch [previousSelected]="storeSelfConsumptionForm?.value?.dispensedStock"
+                          [stockForm]="stock" required name="itemName" formControlName="itemName">
+                        <md-icon *ngIf="!(stock.controls['itemName'].disabled)" class="search-btn" mdSuffix appBatchSearch [previousSelected]="storeSelfConsumptionForm?.value?.dispensedStock"
+                          [stockForm]="stock">search</md-icon>
+                      </md-form-field>
+                    </td>
+                    <td>
+                      <md-form-field class="input-full-width">
+                        <input mdInput placeholder="{{currentLanguageSet?.itemDispense?.batchNo}}" required name="batchNo" formControlName="batchNo" readonly>
+                      </md-form-field>
+                    </td>
+                    <td>
+                      <md-form-field class="input-full-width">
+                        <input mdInput placeholder="{{currentLanguageSet?.inventory?.qOH}}" required name="quantityInHand" formControlName="quantityInHand" readonly>
+                      </md-form-field>
+                    </td>
+                    <td>
+                      <md-form-field class="input-full-width">
+                        <input mdInput placeholder="{{currentLanguageSet?.inventory?.quantity}}" allowMin='1' allowText="number" required name="quantity" formControlName="quantity"
+                          [attr.maxlength]="(''+stock.value.quantityInHand).length" [disableFormControl]="!(stock.value.itemID)"
+                          (blur)="validateRequestedQuantity(stock)">
+                      </md-form-field>
+                    </td>
+                    <td class="text-right">
+                      <md-icon class="icon-remove cursorPointer" mdTooltip="{{currentLanguageSet?.inventory?.delete}}" (click)="removeDispensedStock(i, stock)">delete</md-icon>
+                    </td>
+                  </tr>
+                </ng-container>
+                <tr *ngIf="storeSelfConsumptionForm.controls['dispensedStock'].valid">
+                  <td colspan="6">
+                    <button md-mini-fab type="button" class="pull-right" color="primary" (click)="addDispensedStock()">
+                      <md-icon>add</md-icon>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </md-card>
+      </div>
+    </div>
+
+    <div class="row m-t-10 m-b-40">
+      <div class="col-xs-12">
+        <button type="button" md-raised-button color="accent" class="pull-right m-r-5 full-width-save button-save-disabled" [disabled]="storeSelfConsumptionForm.invalid"
+          (click)="saveSelfConsumptionStock()">{{currentLanguageSet?.common?.save}}</button>
+        <button type="button" md-raised-button color="primary" class="pull-right m-r-5" [disabled]="storeSelfConsumptionForm.pristine"
+          (click)="reset()">{{currentLanguageSet?.inventory?.clear}}</button>
+      </div>
+    </div>
+  </form>
+</div>

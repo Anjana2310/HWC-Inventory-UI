@@ -1,0 +1,28 @@
+.width5 {
+    width: 5%;
+}
+
+.width10 {
+    width: 10%;
+}
+
+.width15 {
+    width: 15%;
+}
+
+h4 {
+    font-weight: bold;
+    color: #52575C !important;
+}
+
+table {
+    width: 100%;
+    color: #52575C !important;
+  }
+
+.colorpagination li.active {
+    background-color: #336CFB !important;
+    color: white;
+    border-color: #336CFB !important;
+    cursor: default;
+}

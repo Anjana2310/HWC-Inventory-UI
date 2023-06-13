@@ -1,0 +1,80 @@
+<div class="container-fluid">
+  <div class="row m-t-10">
+    <div class="col-xs-12 col-sm-6">
+      <h4 class="inline-block">{{currentLanguageSet?.inventory?.patientIssueWithoutRx}}</h4>
+    </div>
+    <div class="col-xs-12 col-sm-6">
+      <button md-raised-button class="pull-right button-full-width m-l-5" type="button" color="primary" routerLink="View">{{currentLanguageSet?.inventory?.previousRecords}}</button>
+      <button md-raised-button class="pull-right button-full-width m-l-5" type="button" color="primary" (click)="openSearchDialog()">{{currentLanguageSet?.bendetails?.advanceSearch}}</button>
+    </div>
+
+    <div class="col-xs-12">
+      <md-card class="m-t-20 m-b-40">
+        <form [formGroup]='beneficiaryDetailForm' autocomplete="off">
+          <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
+            <md-form-field class="input-full-width">
+              <input mdInput defaultNull allowText='number' maxlength='12' name='beneficiaryID' id='beneficiaryID' formControlName="beneficiaryID"
+                placeholder="{{currentLanguageSet?.bendetails?.beneficiaryID}}" (keyup)='checkBeneficiary()'>
+            </md-form-field>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
+            <md-select class='input-full-width' name='visitNo' formControlName='visitCode' placeholder='{{currentLanguageSet?.itemDispense?.visitcode}}' [disableFormControl]="!beneficiaryID"
+              (change)='getVisitDetail()'>
+              <md-option *ngFor='let visit of beneficiaryDetail' [value]='visit'>
+                {{visit.benVisitCode}}
+              </md-option>
+            </md-select>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
+            <md2-datepicker class='input-full-width' [openOnFocus]="true" name='visitDate' id='visitDate' formControlName="visitDate"
+              placeholder="{{currentLanguageSet?.bendetails?.visitDate}}" [disabled]='true'></md2-datepicker>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
+            <md-form-field class="input-full-width">
+              <input mdInput defaultNull allowText='alphaspace' name='beneficiaryName' id='beneficiaryName' formControlName="beneficiaryName"
+                [readonly]='true' placeholder="{{currentLanguageSet?.inventory?.patientName}}">
+            </md-form-field>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
+            <md-form-field class="input-full-width">
+              <input mdInput defaultNull allowText='number' name='beneficiaryAge' id='beneficiaryAge' formControlName="beneficiaryAge"
+                [readonly]='true' placeholder="{{currentLanguageSet?.bendetails?.age}}">
+            </md-form-field>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
+            <md-form-field class="input-full-width">
+              <input mdInput defaultNull allowText='alphabet' name='genderName' id='genderName' formControlName="genderName" [readonly]='true'
+                placeholder="{{currentLanguageSet?.bendetails?.gender}}">
+            </md-form-field>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
+            <md-form-field class="input-full-width">
+              <input mdInput defaultNull allowText='alphaspace' name='doctorName' id='doctorName' formControlName="doctorName" placeholder="{{currentLanguageSet?.inventory?.doctorName}}"
+                [readonly]='true'>
+            </md-form-field>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
+            <md-form-field class="input-full-width">
+              <input mdInput defaultNull allowText='alphanumericspace' name='reference' id='reference' formControlName="reference" maxlength="50"
+                placeholder="{{currentLanguageSet?.inventory?.remarks}}" [disableFormControl]="!visitCode">
+            </md-form-field>
+          </div>
+          <div class="col-xs-12 col-sm-6 box">
+            <label class="control-label" for="medicineDispenseType">{{currentLanguageSet?.inventory?.typeofDispense}}:</label>
+            <div class="clearfix"></div>
+            <md-radio-group name='medicineDispenseType' formControlName="medicineDispenseType" [disableFormControl]="!visitCode" (change)='getBeneficiaryDetail()'>
+              <md-radio-button color="primary" class="radio-btn" value="Manual">{{currentLanguageSet?.inventory?.manualDispense}}</md-radio-button>
+              <md-radio-button color="primary" class="radio-btn" value="System">{{currentLanguageSet?.inventory?.systemDispense}}</md-radio-button>
+            </md-radio-group>
+          </div>
+          <div class="clearfix"></div>
+        </form>
+
+        <app-system-medicine-dispense [beneficaryDetail]='beneficaryDetail' (resetBeneficiaryDetail)='resetBeneficiaryDetails($event)'
+          *ngIf="medicineDispenseType == 'System'"></app-system-medicine-dispense>
+        <app-manual-medicine-dispense [beneficaryDetail]='beneficaryDetail' (resetBeneficiaryDetail)='resetBeneficiaryDetails($event)'
+          *ngIf="medicineDispenseType == 'Manual'"></app-manual-medicine-dispense>
+      </md-card>
+    </div>
+  </div>
+</div>

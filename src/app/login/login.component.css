@@ -1,0 +1,84 @@
+.container-fluid {
+    height: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mdCard {
+    width: 400px;
+    margin-left: 10px;
+    margin-right: 10px;
+    border-radius: 5px;
+    margin-top: 75px;
+    margin-bottom: 50px;
+    text-align: center;
+}
+
+.formIcons {
+    padding-top: 30px;
+    color: gray;
+}
+
+.mdContent {
+    font-size: 17px;
+}
+
+button {
+    font-size: 15px;
+}
+
+.forgotBtn {
+    margin: 10px;
+}
+
+.mdTitle {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.btn-full-width {
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.full-width {
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.m-b-10 {
+    margin-bottom: 10px;
+}
+
+.f-c-54 {
+  color: #545454 !important;
+}
+
+input::-ms-reveal,
+input::-ms-clear {
+    display: none;
+}
+
+.password {
+    text-decoration: underline;
+    color: #336CFB !important;
+}
+
+.full-width-login {
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: 35px;
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.input.mat-input-element {
+    line-height: 25px;
+}

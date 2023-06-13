@@ -1,0 +1,17 @@
+<app-header [showRoles]="false"></app-header>
+
+<div class="container-fluid">
+  <div class="row m-t-20">
+    <ul class="list-unstyled list-inline text-center" *ngFor="let service of servicesList" (click)="selectService(service)">
+      <li class="width310px">
+        <div class="circle" tooltip={{service.serviceName}}>
+          
+          <md-icon id="store">store</md-icon>
+
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<app-footer></app-footer>

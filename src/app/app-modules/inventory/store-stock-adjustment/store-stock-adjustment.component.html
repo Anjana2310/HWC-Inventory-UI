@@ -1,0 +1,133 @@
+<!-- {{ storeStockAdjustmentForm.value | json}} -->
+<div class="container-fluid">
+  <div class="row m-t-10">
+    <div class="col-xs-12 col-sm-6">
+      <h4>{{currentLanguageSet?.inventory?.storeAdjustment}}</h4>
+    </div>
+
+    <div class="col-xs-12 col-sm-6">
+      <button *ngIf="!editMode" md-raised-button class="pull-right button-full-width" type="button" color="primary" routerLink="/inventory/storeStockAdjustmentDraft/view">{{currentLanguageSet?.inventory?.previousDraftRecords}}</button>
+      <button *ngIf="!editMode" md-raised-button class="pull-right button-full-width" type="button" color="primary" routerLink="/inventory/storeStockAdjustment/view">{{currentLanguageSet?.inventory?.previousRecords}}</button>
+      <button *ngIf="!isMainStore" (click)="addEAushadhiStock()" md-raised-button class="pull-right button-full-width" type="button" color="primary">Add E-Aushadhi Stock</button>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 m-t-5">
+      <h5 style="float: right">E-aushadhi stock last updated on - <strong>{{lastUpdatedStockDate  ? (lastUpdatedStockDate | date: 'dd/MM/yyyy HH:mm') : 'NA'}}</strong></h5>
+    </div>
+  </div>
+  <form [formGroup]="storeStockAdjustmentForm" autocomplete="off" novalidate>
+    <div class="row m-t-20">
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 box">
+        <md2-datepicker class="input-full-width" autocomplete="off" placeholder="{{currentLanguageSet?.inventory?.adjustmentDate}}" name="adjustmentDate" formControlName="adjustmentDate"></md2-datepicker>
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 box">
+        <md-form-field class="input-full-width">
+          <input mdInput allowText="alphanumeric" placeholder="{{currentLanguageSet?.inventory?.referenceNumber}}" name="refNo" formControlName="refNo" required>
+        </md-form-field>
+      </div>
+    </div>
+
+    <div class="row m-t-10">
+      <div class="col-xs-12">
+        <md-card>
+          <div class="table-responsive">
+            <table class="table table-striped responsive-table-form" aria-describedby="storeStockDetails">
+              <caption></caption>  <!-- Table discription added SonarQube Fix -->
+              <thead>
+                <tr>
+                  <th class="width5" id="noValue"></th>
+                  <th class="width15" id="itemName">{{currentLanguageSet?.inventory?.itemName}}</th>
+                  <th class="width10" id="batchID">{{currentLanguageSet?.inventory?.batchID}}</th>
+                  <th class="width10" id="quantityOnHand">{{currentLanguageSet?.inventory?.quantityOnHand}}</th>
+                  <th class="width15" id="adjustmentType">{{currentLanguageSet?.inventory?.adjustmentType}}</th>
+                  <th class="width10" id="adjustmentQuantity">{{currentLanguageSet?.inventory?.adjustmentQuantity}}</th>
+                  <th class="width10" id="qOHAfterAdjustment">{{currentLanguageSet?.inventory?.qOHAfterAdjustment}}</th>
+                  <th class="width20" id="reason">{{currentLanguageSet?.inventory?.reason}}</th>
+                  <th class="width5" id="emptyID"></th>
+                </tr>
+              </thead>
+              <tbody formArrayName="stockAdjustmentList">
+                <ng-container *ngFor="let stock of storeStockAdjustmentForm.controls['stockAdjustmentList']['controls']; let i = index; let isLast=last;">
+                  <tr [formGroupName]="i">
+                    <td class="vertical-align-middle"> {{ i+1 }} </td>
+                    <td>
+                      <md-form-field class="input-full-width">
+                        <input mdInput allowText = "itemNameSearchValidator" appBatchAdjustment [previousSelected]="storeStockAdjustmentForm?.value?.stockAdjustmentList" [stockForm]="stock"
+                          placeholder="{{currentLanguageSet?.inventory?.itemName}}" name="itemName" formControlName="itemName" maxlength="100" required>
+                        <md-icon *ngIf="!(stock.controls['itemName'].disabled)" class="search-btn" mdSuffix appBatchAdjustment [stockForm]="stock"
+                          [previousSelected]="storeStockAdjustmentForm?.value?.stockAdjustmentList">search</md-icon>
+                      </md-form-field>
+                    </td>
+                    <td>
+                      <md-form-field class="input-full-width readonly">
+                        <input mdInput placeholder="{{currentLanguageSet?.inventory?.batchID}}" name="batchID" formControlName="batchID" required readonly>
+                      </md-form-field>
+                    </td>
+                    <td>
+                      <md-form-field class="input-full-width readonly">
+                        <input mdInput allowText="number" placeholder="{{currentLanguageSet?.inventory?.qOH}}" name="quantityInHand" formControlName="quantityInHand" required readonly>
+                      </md-form-field>
+                    </td>
+                    <td>
+                      <md-select class="input-full-width" placeholder="{{currentLanguageSet?.inventory?.adjustmentType}}" name="adjustmentType" formControlName="adjustmentType"
+                        (change)="calculateQOHAfterAdjustment(stock)" required>
+                        <md-option *ngFor="let adjustmentType of adjustmentTypeList" [value]="adjustmentType">
+                          {{adjustmentType}}
+                        </md-option>
+                      </md-select>
+                    </td>
+                    <td>
+                      <md-form-field class="input-full-width" *ngIf="stock.value.adjustmentType == 'Issue'">
+                        <input mdInput allowText="number" placeholder="{{currentLanguageSet?.inventory?.adjustmentQuantity}}" name="adjustedQuantity" formControlName="adjustedQuantity"
+                          (input)="calculateQOHAfterAdjustment(stock)" [allowMax]="stock.value.quantityInHand" required>
+                      </md-form-field>
+                      <md-form-field class="input-full-width" *ngIf="stock?.value?.adjustmentType != 'Issue'">
+                        <input mdInput allowText="number" placeholder="{{currentLanguageSet?.inventory?.adjustmentQuantity}}" name="adjustedQuantity" formControlName="adjustedQuantity"
+                          (input)="calculateQOHAfterAdjustment(stock)" [allowMax]="9999" required>
+                      </md-form-field>
+                    </td>
+                    <td>
+                      <md-form-field class="input-full-width readonly">
+                        <input mdInput allowText="number" placeholder="{{currentLanguageSet?.inventory?.qOHAfterAdjustment}}" name="qohAfterAdjustment" formControlName="qohAfterAdjustment"
+                          required readonly>
+                      </md-form-field>
+                    </td>
+                    <td>
+                      <md-form-field class="input-full-width">
+                        <input mdInput allowText="alphaspace" placeholder="{{currentLanguageSet?.inventory?.reason}}" name="reason" formControlName="reason" required>
+                      </md-form-field>
+                    </td>
+                    <td class="text-right">
+                      <md-icon class="icon-remove cursorPointer" mdTooltip="{{currentLanguageSet?.inventory?.delete}}" (click)="removeFromStockAdjustmentList(i, stock)">delete</md-icon>
+                    </td>
+                  </tr>
+                </ng-container>
+                <tr *ngIf="storeStockAdjustmentForm.valid">
+                  <td colspan="9">
+                    <button md-mini-fab type="button" class="pull-right" color="primary" (click)="addToStockAdjustmentList()">
+                      <md-icon>add</md-icon>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </md-card>
+      </div>
+    </div>
+
+    <div class="row m-t-10 m-b-40">
+      <div class="col-xs-12">
+        <button *ngIf="editMode" type="button" class="pull-left" color="primary" md-raised-button mdTooltip="{{currentLanguageSet?.inventory?.back}}" mdTooltipPosition="right"
+          (click)="goBack()">
+          {{currentLanguageSet?.inventory?.back}}</button>
+        <button type="button" md-raised-button color="accent" class="pull-right m-r-5 full-width-save button-save-disabled" [disabled]="storeStockAdjustmentForm.invalid"
+          (click)="submitStockAdjustmentFinal(storeStockAdjustmentForm)">{{currentLanguageSet?.common?.save}}</button>
+        <button type="button" md-raised-button color="accent" class="pull-right m-r-5 full-width-save button-save-disabled" [disabled]="storeStockAdjustmentForm.invalid"
+          (click)="submitStockAdjustmentDraft(storeStockAdjustmentForm)">{{currentLanguageSet?.inventory?.saveDraft}}</button>
+        <button type="button" md-raised-button color="primary" class="pull-right m-r-5" [disabled]="storeStockAdjustmentForm.pristine"
+          (click)="resetStoreStockAdjustmentForm()">{{currentLanguageSet?.inventory?.clear}}</button>
+      </div>
+    </div>
+  </form>
+</div>

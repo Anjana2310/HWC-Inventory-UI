@@ -1,0 +1,101 @@
+<section class="container-fluid">
+  <section class="row m-t-10 no-gutters">
+    <div class="col-xs-12 col-sm-4 box">
+      <h4>{{currentLanguageSet?.inventory?.previousStoreAdjustment}}</h4>
+    </div>
+    <div class="col-xs-12 col-sm-3 box">
+      <md2-datepicker class="input-full-width" autocomplete="off" placeholder="{{currentLanguageSet?.inventory?.fromDate}}" [(ngModel)]="fromDate" [min]="_minDate" [max]="today"  #startDate="ngModel" ngModel></md2-datepicker>
+    </div>
+    <div class="col-xs-12 col-sm-3 box">
+      <md2-datepicker class="input-full-width" autocomplete="off" placeholder="{{currentLanguageSet?.inventory?.toDate}}" [(ngModel)]="toDate" readonly="true" [min]="startDate.value" [max]="today" #endDate="ngModel" ngModel></md2-datepicker>
+      <span class="errorText f-s-10 p-l-10" *ngIf="(endDate.value < startDate.value)">{{currentLanguageSet?.inventory?.toDateCannotBeBeforeFromDate}}</span>
+    </div>
+    <div class="col-xs-12 col-sm-2 box">
+      <button class="previous-btn full-width-view-records button-view-records-disabled" md-raised-button [disabled]="!fromDate || !toDate || ((endDate.value < startDate.value))" type="button" color="accent" (click)="viewRecords()">{{currentLanguageSet?.inventory?.viewRecords}}</button>
+    </div>
+  </section>
+
+
+  <section class="row m-t-20 m-b-40">
+    <div class="col-xs-12">
+      <md-card>
+        <md-card-content>
+          <div class="row">
+            <div class="col-xs-12 text-right">
+              <md-input-container id="filterbox">
+                <input autocomplete="off" mdInput placeholder="{{currentLanguageSet?.common?.inTableSearch}}" [(ngModel)]="filterTerm" name="filterTerm" (keyup)="filterStockAdjustmentList(filterTerm)">
+                <md-icon class="filterTest" mdSuffix>search</md-icon>
+              </md-input-container>
+            </div>
+            <section class="col-xs-12">
+              <div class="table-responsive">
+                <table [md2Data]="filteredStockAdjustmentList" #md2="md2DataTable" [rowsPerPage]="5" [activePage]="1" class="table table-striped responsive-table-view" aria-describedby="viewStoreStockDetails">
+                  <caption></caption>  <!-- Table discription added SonarQube Fix -->
+                  <thead>
+                    <tr>
+                      <th id="noValue"></th>
+                      <th id="stockAdjustmentID">{{currentLanguageSet?.inventory?.stockAdjustmentID}}</th>
+                      <th id="refNo">{{currentLanguageSet?.inventory?.refNo}}</th>
+                      <th id="createdBy">{{currentLanguageSet?.inventory?.createdBy}}</th>
+                      <th id="createdDate">{{currentLanguageSet?.inventory?.createdDate}}</th>
+                      <th id="view">{{currentLanguageSet?.inventory?.view}}</th>
+                    </tr>
+                  </thead>
+                  <ng-template [ngIf]="filteredStockAdjustmentList && filteredStockAdjustmentList.length == 0">
+                    <tbody>
+                      <tr *ngFor="let row of blankTable">
+                        <td> &nbsp; </td>
+                        <td> &nbsp; </td>
+                        <td> &nbsp; </td>
+                        <td> &nbsp; </td>
+                        <td> &nbsp; </td>
+                        <td> &nbsp; </td>
+                      </tr>
+                    </tbody>
+                  </ng-template>
+                  <ng-template [ngIf]="filteredStockAdjustmentList && filteredStockAdjustmentList.length == 0">
+                    <tbody>
+                      <tr>
+                        <td colspan="6" style="text-align: center; font-size: 16px;">
+                          <strong>{{currentLanguageSet?.inventory?.norecordsfound}}</strong>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </ng-template>
+                  <tbody>
+                    <tr *ngFor="let adjustment of md2.data">
+                      <td data-title="S.No">{{ filteredStockAdjustmentList.indexOf(adjustment)+1 }}</td>
+                      <td data-title="Stock Adjustment ID">{{adjustment?.stockAdjustmentID}}</td>
+                      <td data-title="Ref. No.">{{adjustment?.refNo}}</td>
+                      <td data-title="Created By">{{adjustment?.createdBy}}</td>
+                      <td data-title="Created Date">{{adjustment?.createdDate | istDate: 'dd/MM/yyyy'}}</td>
+                      <td>
+                        <md-icon class="cursorPointer filterTest" (click)="viewStockAdjustmentDetails(adjustment.stockAdjustmentID)">remove_red_eye</md-icon>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <tr *ngIf="filteredStockAdjustmentList.length > 0">
+                      <td colspan="3" class="vertical-align-middle total-count">
+                        <div> {{currentLanguageSet?.inventory?.totalCount}} : {{ filteredStockAdjustmentList.length }}</div>
+                      </td>
+                      <td colspan="3" style="text-align: right">
+                        <md2-pagination></md2-pagination>
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </section>
+          </div>
+        </md-card-content>
+        <md-card-actions>
+          <div class="back-btn-container ">
+            <button md-raised-button mdTooltip="{{currentLanguageSet?.inventory?.back}}" mdTooltipPosition="right" color="primary" (click)="goBack()">{{currentLanguageSet?.inventory?.back}}</button>
+          </div>
+        </md-card-actions>
+      </md-card>
+    </div>
+  </section>
+
+</section>

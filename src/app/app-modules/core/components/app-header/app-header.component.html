@@ -1,0 +1,164 @@
+<nav class="navbar navbar-iemr">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button
+        type="button"
+        class="navbar-toggle collapsed"
+        data-toggle="collapse"
+        data-target="#top-navbar, #main-navbar"
+        aria-expanded="false"
+      >
+        <span class="sr-only">{{currentLanguageSet?.inventory?.togglenavigation}}</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand">
+        <img src="assets/images/logo.png" alt="Logo" />
+      </a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="top-navbar">
+      <ul class="nav navbar-nav navbar-right">
+        <li
+          *ngIf="isAuthenticated && !isExternal"
+          class="logout cursorPointer"
+          tooltip="{{currentLanguageSet?.inventory?.logout}}"
+        >
+          <a (click)="logout()">
+            <span class="logoutIcon"></span>
+            <span style="color:#ffffff;" class="hidden-sm hidden-md hidden-lg"
+              >{{currentLanguageSet?.inventory?.logout}}</span
+            >
+          </a>
+        </li>
+
+        <li
+          *ngIf="providerServiceID && !isExternal && storeName"
+          class="servicePoint cursorPointer"
+          [routerLink]="'/facility'"
+          mdTooltip="{{currentLanguageSet?.inventory?.storeSelection}}"
+        >
+          <a>
+            <img src="assets/images/pharmacy (4).png" alt="Pharmacy" /> &nbsp; &nbsp;
+            <span style="color:white"
+              >{{currentLanguageSet?.inventory?.store}}
+              <span style="color:white">:</span>
+              <span style="color:#ffffff;">{{ storeName | titlecase }}</span>
+            </span>
+          </a>
+        </li>
+
+        <li class="cursorPointer" *ngIf="isAuthenticated">
+          <span
+            class="fa fa-question-circle helpAlign"
+            tooltip="{{currentLanguageSet?.inventory?.help}}"
+            alt="Help"
+            [mdMenuTriggerFor]="knowAboutUs"
+          ></span>
+        </li>
+        <li *ngIf="userName" class="hidden-xs hidden-sm" tooltip="{{currentLanguageSet?.inventory?.user}}">
+          <a>
+            <span style="color:white">
+              {{currentLanguageSet?.inventory?.welcome}}
+              <span style="color:#ffffff;">{{ userName | titlecase }}</span>
+            </span>
+          </a>
+        </li>
+      
+        <md-menu #knowAboutUs x-position="before" class="m-t-40 role-menu">
+          <md-list class="p-t-0">
+            <md-list-item (click)="showVersionAndCommitDetails()"
+              >{{currentLanguageSet?.inventory?.version}}:{{ versionUI }}</md-list-item
+            >
+            <md-list-item
+              ><a target="_blank" href="{{ license }}">{{currentLanguageSet?.inventory?.licenseInfo}}</a>
+            </md-list-item>
+          </md-list>
+        </md-menu>
+        <li *ngIf="userName" tooltip="{{currentLanguageSet?.inventory?.user}}">
+          <a>
+            <img src="assets/images/UserIcon1.png" alt="user" [mdMenuTriggerFor]="userInfo" />
+            <md-menu
+              class="userInfo role-menu"
+              #userInfo
+              xPosition="after"
+              yPosition="below"
+              [overlapTrigger]="false"
+            >
+              <button class="userInfo-btn" mat-menu-item *ngIf="userName">
+                <span class="material-icons">{{currentLanguageSet?.inventory?.accountCircle}}</span>
+                <span>{{ userName | titlecase }}</span>
+              </button>
+              <button class="userInfo-btn" mat-menu-item *ngIf="designation">
+                <span class="material-icons">work</span>
+                <span>{{ designation | titlecase }}</span>
+              </button>
+            </md-menu>
+          </a>
+        </li>
+        <li class="alignDropDown" *ngIf="isAuthenticated">
+          <select
+          class="form-control drop-arrow border-radius-20 height-30 width120px pull-right"
+          name="language"
+          [(ngModel)]="language"
+          (change)="changeLanguage(language)"
+        >
+          <option
+            *ngFor="let language of languageArray"
+            [value]="language.languageName"
+            >{{ language.languageName }}</option
+          >
+        </select>
+        </li>
+        <li class="alignWord" *ngIf="isAuthenticated">
+          <span>{{currentLanguageSet?.inventory?.selectLanguage}} :</span>
+         
+        </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+<div *ngIf="showRoles && !isExternal" class="container-fluid">
+  <div class="collapse navbar-collapse navigatorlist" id="main-navbar">
+    <ul class="nav navbar-nav" *ngFor="let item of navigation">
+      <li>
+        <button md-button [mdMenuTriggerFor]="items" [ngClass]="{'active': updateCSSToShowActivePharmacist}">
+          {{ item.role }}
+          <span class="caret"></span>
+        </button>
+        <md-menu
+          class="role-menu"
+          #items="mdMenu"
+          yPosition="below"
+          [overlapTrigger]="false"
+        >
+          <button
+            md-menu-item
+            *ngFor="let value of item.work"
+            [routerLink]="[value.link]"
+            routerLinkActive="active"
+            #activePharmacist="routerLinkActive"
+          >
+            {{ value.label }}
+          </button>
+        </md-menu>
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<div *ngIf="showRoles && isExternal" class="container-fluid">
+  <div class="collapse navbar-collapse navigatorlist" id="main-navbar">
+    <ul class="nav navbar-nav">
+      <li>
+        <button md-button (click)="backToParent()">
+          {{currentLanguageSet?.itemDispense?.pharmacist}}
+        </button>
+      </li>
+    </ul>
+  </div>
+</div>

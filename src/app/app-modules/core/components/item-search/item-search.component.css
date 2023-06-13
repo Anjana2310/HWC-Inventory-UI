@@ -1,0 +1,52 @@
+.input-full-width {
+    width: 100%;
+}
+
+.m-t-30 {
+    margin-top: 30px;
+}
+
+.container-fluid {
+    padding: 24px !important;
+}
+
+.title {
+    margin: 0px 0px 10px;
+    padding: 15px 24px 15px;
+    color: white;
+    font-size: 18px;
+    line-height: 32px;
+    font-weight: 400;
+    background: #336CFB;
+    overflow-y: hidden;
+}
+
+.title h4 {
+    display: inline-block;
+    font-weight: bold;
+}
+
+.title .exit {
+    cursor: pointer;
+}
+
+@media screen and (max-width: 768px) {
+    .search-btn {
+        width: 100%;
+    }
+}
+
+table {
+    width: 100%;
+    color: #52575C !important;
+  }
+  
+.full-width-search {
+    margin-bottom: 10px;
+    height: 35px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 0.05em;
+    margin-left: 5px;
+  }

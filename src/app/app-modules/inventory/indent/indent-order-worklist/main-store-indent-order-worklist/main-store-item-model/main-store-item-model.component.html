@@ -1,0 +1,73 @@
+<div class="title">
+  <h4>ItemList Details</h4>
+  <button md-icon-button mdDialogClose tooltip="{{currentLanguageSet?.inventory?.close}}" class="pull-right exit width-20px">
+    <md-icon>close</md-icon>
+  </button>
+</div>
+
+<div class="scrolling-content">
+  <div class="container-fluid">
+    <table class="table" aria-describedby="storeItemDetails">
+      <caption></caption>  <!-- Table discription added SonarQube Fix -->
+      <tbody>
+        <tr>
+          <th id="indentID">{{currentLanguageSet?.inventory?.indentID}}:</th>
+          <td> {{mainStoreIndentDetails?.indentID}}</td>
+          <th id="refNo">{{currentLanguageSet?.inventory?.refNo}}:</th>
+          <td> {{mainStoreIndentDetails?.refNo}}</td>
+        </tr>
+        <tr>
+          <th id="createdBy">{{currentLanguageSet?.inventory?.createdBy}}:</th>
+          <td> {{mainStoreIndentDetails?.createdBy}}</td>
+          <th id="createdDate">{{currentLanguageSet?.inventory?.createdDate}}:</th>
+          <td> {{mainStoreIndentDetails?.createdDate | istDate: 'dd/MM/yyyy'}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    
+
+    <div class="row">
+      <div class="col-xs-12">
+        <section class="table table-responsive">
+          <table [md2Data]="mainStoreBatchWiseItemList" #md2="md2DataTable" [rowsPerPage]="5" [activePage]="1" class="table table-striped responsive-table-view" aria-describedby="storeItemDetails">
+            <caption></caption> <!-- Table discription added SonarQube Fix -->
+            <thead>
+              <tr>
+                <th id=""></th>
+                <th id="itemName">{{currentLanguageSet?.inventory?.itemName}}</th>
+                <th id="requiredQuantity">{{currentLanguageSet?.inventory?.requiredQuantity}}</th>
+                <th id="remarks">{{currentLanguageSet?.inventory?.remarks}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of md2.data">
+                <td data-title="S.No.">{{ mainStoreBatchWiseItemList.indexOf(item)+1 }}</td>
+                <td data-title="Item Name">{{item?.itemName}}</td>
+                <td data-title="Required Quantity">{{item?.requiredQty}}</td>
+                <td data-title="Remarks">{{item?.remarks}}</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr *ngIf="mainStoreBatchWiseItemList.length > 0">
+                <td colspan="2" class="total-count">
+                  <div> {{currentLanguageSet?.inventory?.totalCount}} : {{ mainStoreBatchWiseItemList.length }}</div>
+                </td>
+
+                <td colspan="2" style="text-align: right">
+                  <md2-pagination></md2-pagination>
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </section>
+      </div>
+    </div>
+
+    <div class="row m-b-15">
+      <div class="col-xs-12">
+        <button class="pull-right" md-raised-button color="primary" tabindex="-1" type="button" (click)="dialogRef.close()">{{currentLanguageSet?.common?.ok}}</button>
+      </div>
+    </div>
+  </div>
+</div>

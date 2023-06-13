@@ -1,0 +1,46 @@
+<div class="container-fluid">
+  <form (ngSubmit)="f.form.valid && login()" #f="ngForm">
+    <div class="btn-center mdCard">
+        <div class="mdTitle">
+          <img src="assets/images/SwasthyaL-withoutcard.png" alt="Logo">
+        </div>
+        <div class="row no-gutters mdContent" style="text-align: center;">
+          <div class="col-xs-1 col-md-1 col-sm-1 m-t-25">
+            <!-- <span class="material-icons formIcons">account_box</span> -->
+            <img src="assets/images/UsernameIcon.png" alt="UsernameIcon">
+          </div>
+          <div class="col-xs-11 col-md-11 col-sm-11">
+            <md-input-container class="full-width">
+              <input autocomplete="off" allowText="usernameValidator" autofocus="autofocus" mdInput type="text" id="userID" placeholder="Enter User Name" [(ngModel)]="userName" name="userName" />
+            </md-input-container>
+          </div>
+        </div>
+        <div class="row no-gutters mdContent" style="text-align: center;">
+          <div class="col-xs-1 col-md-1 col-sm-1 m-t-25">
+            <!-- <span class="material-icons formIcons">lock</span> -->
+            <img src="assets/images/PasswordIcon.png" alt="UsernameIcon">
+          </div>
+          <div class="col-xs-11 col-md-11 col-sm-11">
+            <md-input-container class="full-width">
+              <input autocomplete="off" mdInput [type]="dynamictype" id="password" placeholder="Enter Password" [(ngModel)]="password" name="password" />
+              <md-icon mdSuffix class="mat-icon material-icons cursorPointer" role="img" aria-hidden="true" mdTooltip="Show Password" (mousedown)='showPWD()' (touchstart)='showPWD()' (mouseup)='hidePWD()' (touchend)='showPWD()' style="color:gray">visibility</md-icon>
+            </md-input-container>
+          </div>
+        </div>
+        <div class="row mdContent">
+          <div class="col-xs-12">
+            <button md-raised-button color="primary" type="submit" class="btn-full-width full-width-login background-overall">Login</button>
+          </div>
+        </div>
+        <div class="row m-t-25 mdContent">
+          <div class="col-xs-12 col-sm-3"></div>
+          <div class="col-xs-12 col-sm-9">
+            <a class="cursorPointer f-c-54 font-regular pull-right password" routerLink="/reset-password">Forgot Password?</a>
+          </div>
+        </div>
+    </div>
+  </form>
+
+</div>
+
+<app-footer></app-footer>

@@ -1,0 +1,100 @@
+<div *ngIf="confirmAlert">
+    <h3 class="title info">{{ title }}</h3>
+    <div class="message">{{ message }}</div>
+    <div class="action">
+        <button class="full-width-login button-reset" (click)="dialogRef.close(false)">{{btnCancelText}}</button>
+        <button class="full-width-login button-ok" (click)="dialogRef.close(true)" cdkFocusInitial>{{btnOkText}}</button>
+    </div>
+</div>
+
+<div *ngIf="alert">
+    <h3 [ngClass]="['title', status]">{{ (status == 'warn'? 'warning': status) | titlecase }}</h3>
+    <div class="message">{{ message }}</div>
+    <div class="action">
+        <button class="full-width-login button-ok" md-dialog-close cdkFocusInitial>{{btnOkText}}</button>
+    </div>
+</div>
+
+<div *ngIf="remarks">
+    <h3 class="title info">{{ message }}</h3>
+    <div class="message">
+        <md-input-container [style.width]="'100%'">
+            <input autocomplete="off" mdInput placeholder="{{currentLanguageSet?.inventory?.enterRemarks}}" name="Remarks" #remarksRef>
+        </md-input-container>
+    </div>
+    <div class="action">
+        <button class="full-width-login button-reset" (click)="dialogRef.close(false)">{{btnCancelText}}</button>
+        <button class="full-width-login button-ok" (click)="dialogRef.close(remarksRef.value)">{{btnOkText}}</button>
+    </div>
+</div>
+
+<div *ngIf="editRemarks">
+    <h3 class="title info">{{ message }}</h3>
+    <div class="message">
+        <md-input-container [style.width]="'100%'">
+            <textarea mdInput mdTextareaAutosize placeholder="{{currentLanguageSet?.inventory?.enterRemarks}}" name="Remarks" maxLength="500" #remarksRef [(ngModel)]="comments"></textarea>
+        </md-input-container>
+    </div>
+    <div class="action">
+        <button class="full-width-login button-reset" (click)="dialogRef.close(false)">{{btnCancelText}}</button>
+        <button class="full-width-login button-ok" (click)="dialogRef.close(remarksRef.value+'.')">{{btnOkText}}</button>
+    </div>
+</div>
+
+<div *ngIf="provideDraftDesc">
+    <h3 class="title info">{{ message }}</h3>
+    <div class="message">
+        <md-input-container [style.width]="'100%'">
+            <textarea mdInput mdTextareaAutosize placeholder="{{currentLanguageSet?.inventory?.provideDraftDesc}}" name="draftDescription" maxLength="500"  [value]="comments" #draftDescription></textarea>
+        </md-input-container>
+    </div>
+    <div class="action">
+        <button class="full-width-login button-reset" (click)="dialogRef.close(comments)">{{btnCancelText}}</button>
+        <button class="full-width-login button-ok" (click)="dialogRef.close(draftDescription.value)">{{btnOkText}}</button>
+    </div>
+</div>
+
+<div *ngIf="notify">
+    <h3 class="title warn">{{ message }}</h3>
+    <div class="message">
+        <ul class="list-group ">
+            <li class="list-group-item alert alert-danger" *ngFor="let items of mandatories">
+                <span class="glyphicon glyphicon-hand-right" style="color:#cd807e; margin-right: 5px"></span>
+                <strong> {{items | titlecase}}</strong>
+            </li>
+        </ul>
+    </div>
+    <div class="action">
+        <button class="full-width-login button-ok" (click)="dialogRef.close(true)" cdkFocusInitial>{{btnOkText}}</button>
+    </div>
+</div>
+
+<div *ngIf="choice">
+    <h3 class="title info">{{ message }}</h3>
+    <div class="message">
+        <md-radio-group [(ngModel)]="selectedValue" disableRipple="true" class="radio-group">
+            <md-radio-button color="primary" disableRipple="true" class="radio-button" *ngFor="let value of values;" [value]="value.id">
+                {{value.name}}
+            </md-radio-button>
+        </md-radio-group>
+    </div>
+    <div class="action">
+        <button class="full-width-login button-reset" (click)="dialogRef.close(false)">{{btnCancelText}}</button>
+        <button class="full-width-login button-ok" (click)="dialogRef.close(selectedValue)" cdkFocusInitial>{{btnOkText}}</button>
+    </div>
+</div>
+
+<div *ngIf="sessionTimeout">
+    <h3 class="title warn">{{ title }}</h3>
+    <div class="message">
+        <span>{{message}} &nbsp;</span>
+        <small>
+            <span *ngIf="minutes >= 1">{{minutes.toFixed(0)}} &nbsp; minutes &nbsp;</span>
+            <span *ngIf="seconds > 0">{{seconds}} &nbsp; seconds</span>
+        </small>
+    </div>
+    <div class="action">
+        <button class="full-width-login button-reset" (click)="stopTimer()">{{btnCancelText}}</button>
+        <button class="full-width-login button-ok" (click)="continueSession()" cdkFocusInitial>{{btnOkText}}</button>
+    </div>
+</div>

@@ -1,0 +1,108 @@
+<div class="container-fluid">
+  <form [formGroup]="physicalStockEntryForm" autocomplete="off">
+    <div class="row m-t-10">
+      <div class="col-xs-12 col-sm-6">
+        <h4>
+          {{currentLanguageSet?.inventory?.physicalStockEntry}}
+        </h4>
+      </div>
+      <div class="col-xs-12 col-sm-6">
+        <button md-raised-button class="pull-right button-full-width" type="button" color="primary" routerLink="View">{{currentLanguageSet?.inventory?.previousRecords}}</button>
+      </div>
+    </div>
+
+    <div class="row m-t-10">
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 ">
+        <md-form-field class="input-full-width">
+          <input mdInput required allowText="alphanumeric" maxlength="20" name="referenceNumber" formControlName="referenceNumber"
+            placeholder="{{currentLanguageSet?.inventory?.referenceNumber}}" #referenceNumber>
+        </md-form-field>
+        <md-hint>
+          <span class="error_text" *ngIf="!referenceNumber.valid  && ( referenceNumber.dirty || referenceNumber.touched)">{{currentLanguageSet?.inventory?.pleaseenterReferenceNumber}}</span>
+        </md-hint>
+      </div>
+
+      <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 ">
+        <md2-datepicker class="input-full-width" name="stockEntryDate"  placeholder="{{currentLanguageSet?.inventory?.date}}" formControlName="stockEntryDate" [ngModel]="today" [disabled]="true"></md2-datepicker>
+      </div>
+    </div>
+
+    <div class="row m-t-10">
+      <div class="col-xs-12">
+        <md-card>
+          <div class="table-responsive">
+            <table class="table table-striped responsive-table-form" aria-describedby="stockEntryDetails">
+              <caption></caption> <!-- Table discription added SonarQube Fix -->
+              <thead>
+                <tr>
+                  <th id="" class="width5"></th>
+                  <th id="itemName" class="width20">{{currentLanguageSet?.inventory?.itemName}}</th>
+                  <th id="qtyInLowestUnit" class="width20">{{currentLanguageSet?.inventory?.qtyInLowestUnit}}</th>
+                  <th id="unitCostPrice" class="width20">{{currentLanguageSet?.inventory?.unitCostPrice}}</th>
+                  <th id="batchNo" class="width20">{{currentLanguageSet?.itemDispense?.batchNo}}</th>
+                  <th id="expiryDate" class="width25">{{currentLanguageSet?.itemDispense?.expiryDate}}</th>
+                  <th id="" class="width5">&nbsp;</th>
+                </tr>
+              </thead>
+              <tbody formArrayName="physicalStock">
+                <ng-container *ngFor="let stock of physicalStockEntryForm.controls['physicalStock']['controls']; let i = index">
+                  <tr [formGroupName]="i">
+                    <td class="vertical-align-middle"> {{ i+1 }} </td>
+                    <td>
+                      <md-form-field class="input-full-width">
+                        <input mdInput allowText = "itemNameSearchValidator" appItemSearch [stockForm]="stock" placeholder="{{currentLanguageSet?.inventory?.itemName}}" required name="itemName" formControlName="itemName"
+                          maxlength="100">
+                        <md-icon *ngIf="!(stock.controls['itemName'].disabled)" class="search-btn" appItemSearch [stockForm]="stock" mdSuffix>search</md-icon>
+                      </md-form-field>
+                    </td>
+                    <td>
+                      <md-form-field class="input-full-width">
+                        <input mdInput placeholder="{{currentLanguageSet?.inventory?.qtyInLowestUnit}}" allowText="number" name="quantity" formControlName="quantity" maxlength="6"
+                          [required]="true" [disableFormControl]="!(stock.value.itemID)">
+                      </md-form-field>
+                    </td>
+                    <td>
+                      <md-form-field class="input-full-width">
+                        <input mdInput placeholder="{{currentLanguageSet?.inventory?.unitCostPrice}}" allowText="decimal" maxlength="5" name="totalCostPrice" formControlName="totalCostPrice"
+                          [required]="true" [disableFormControl]="!(stock.value.itemID)">
+                      </md-form-field>
+                    </td>
+                    <td>
+                      <md-form-field class="input-full-width">
+                        <input mdInput placeholder="{{currentLanguageSet?.itemDispense?.batchNo}}" allowText="alphanumeric" maxlength="45" name="batchNo" formControlName="batchNo"
+                          [required]="true" [disableFormControl]="!(stock.value.itemID)" (change)="checkForDuplicateBatch(stock, i)">
+                      </md-form-field>
+                    </td>
+                    <td class="input-full-width input-datepicker">
+                      <md2-datepicker class="input-full-width" [min]="today" placeholder="{{currentLanguageSet?.itemDispense?.expiryDate}}" [required]="stock.value.isMedical" [disableFormControl]="!(stock.value.itemID)"
+                        name="expiryDate" formControlName="expiryDate" (keydown)="preventTyping($event)"></md2-datepicker>
+                    </td>
+                    <td class="text-right">
+                      <md-icon class="icon-remove cursorPointer" (click)="removeStock(i, stock)" mdTooltip="{{currentLanguageSet?.inventory?.delete}}">delete</md-icon>
+                    </td>
+                  </tr>
+                </ng-container>
+                <tr *ngIf="physicalStockEntryForm.controls['physicalStock'].valid">
+                  <td colspan="7">
+                    <button md-mini-fab type="button" class="pull-right" color="primary" (click)="addStock()">
+                      <md-icon>add</md-icon>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </md-card>
+      </div>
+    </div>
+
+    <div class="row m-t-10 m-b-40">
+      <div class="col-xs-12">
+        <button type="button" md-raised-button color="accent" class="pull-right m-r-5 full-width-save button-save-disabled" [disabled]="physicalStockEntryForm.invalid"
+          (click)="savePhysicalStock()">{{currentLanguageSet?.common?.save}}</button>
+        <button type="button" md-raised-button color="primary" class="pull-right m-r-5" [disabled]="physicalStockEntryForm.pristine"
+          (click)="reset()">{{currentLanguageSet?.inventory?.clear}}</button>
+      </div>
+    </div>
+  </form>
+</div>

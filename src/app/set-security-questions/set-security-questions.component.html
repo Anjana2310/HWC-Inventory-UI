@@ -1,0 +1,94 @@
+<md-grid-list class="mdList" cols="1" (mouseup)='hidePWD()'>
+  <md-grid-tile>
+    <md-card class="mdCard">
+      <md-card-title>
+        <div class="row text-center"> <img src="assets/images/Piramal-logo-login.png" alt="Logo"> </div>
+        <div class="row text-center">
+          <h4 class="font-Medium f-s-24">Account Support</h4>
+          <h5 class="f-s-16 f-c-54">Follow the steps to change/reset the password</h5>
+        </div>
+      </md-card-title>
+      <md-card-content>
+
+        <div class="row" *ngIf="questionsection">
+          <form #form1="ngForm">
+            <div class="col-xs-12 col-sm-12">
+              <md-select placeholder="Question 1" [(ngModel)]="question1" name="question1" [style.width]="'100%'" required (change)="filterArrayOne(question1)">
+                <md-option *ngFor="let question of questions" [value]="question.QuestionID" (click)="updateQuestions(question.QuestionID,0)">
+                  {{question.Question}}
+                </md-option>
+              </md-select>
+            </div>
+            <div class="col-xs-12 col-sm-12 m-t-10">
+              <md-input-container style="width: 100%">
+                <input autocomplete="off" allowText="answerValidator" id="ans1" mdInput placeholder="Answer 1" [(ngModel)]="answer1" name="answer1" required>
+              </md-input-container>
+            </div>
+          </form>
+          <form #form2="ngForm">
+            <div class="col-xs-12 col-sm-12 m-t-25">
+              <md-select placeholder="Question 2" [disabled]="!form1.valid" [(ngModel)]="question2" name="question2" [style.width]="'100%'"
+                required (change)="filterArrayTwo(question2)">
+                <md-option *ngFor="let question of Q_array_one" [value]="question.QuestionID" (click)="updateQuestions(question.QuestionID,1)">
+                  {{question.Question}}
+                </md-option>
+              </md-select>
+            </div>
+            <div class="col-xs-12 col-sm-12 m-t-10">
+              <md-input-container style="width: 100%">
+                <input autocomplete="off" id="ans2" allowText="answerValidator" mdInput [disabled]="!form1.valid" placeholder="Answer 2" [(ngModel)]="answer2" name="answer2" required>
+              </md-input-container>
+            </div>
+          </form>
+          <form #form3="ngForm">
+            <div class="col-xs-12 col-sm-12 m-t-25">
+              <md-select placeholder="Question 3" [disabled]="!form2.valid" [(ngModel)]="question3" name="question3" [style.width]="'100%'"
+                required>
+                <md-option *ngFor="let question of Q_array_two" [value]="question.QuestionID" (click)="updateQuestions(question.QuestionID,2)">
+                  {{question.Question}}
+                </md-option>
+              </md-select>
+            </div>
+            <div class="col-xs-12 col-sm-12 m-t-10">
+              <md-input-container style="width: 100%">
+                <input autocomplete="off" id="ans3" allowText="answerValidator" mdInput placeholder="Answer 3" [disabled]="!form2.valid" [(ngModel)]="answer3" name="answer3" required>
+              </md-input-container>
+            </div>
+          </form>
+          <div class="col-xs-12 col-sm-12">
+            <div class="row">
+
+              <button md-raised-button color="primary" class="full-width largeBtn" [disabled]="!form3.valid" (click)="setSecurityQuestions()">Next</button>
+            </div>
+          </div>
+        </div>
+      
+        <form #passwordForm="ngForm">
+          <div class="row " *ngIf="passwordSection">
+            <div class="col-xs-12 col-sm-12">
+              <md-input-container style="width: 100%">
+                <md-icon mdPrefix class="mat-icon material-icons" role="img" aria-hidden="true" style="color: gray">lock</md-icon>
+                <input autocomplete="off" mdInput type="{{dynamictype}}" placeholder="New Password" [(ngModel)]="newpwd" name="newpwd" required>
+                <md-icon mdSuffix class="mat-icon material-icons cursorPointer" role="img" aria-hidden="true" mdTooltip="Show Password" (mousedown)='showPWD()'
+                  style="color:gray">visibility</md-icon>
+              </md-input-container>
+            </div>
+            <div class="col-xs-12 col-sm-12">
+              <md-input-container style="width: 100%">
+                <md-icon mdPrefix class="mat-icon material-icons" role="img" aria-hidden="true" style="color: gray">lock</md-icon>
+                <input autocomplete="off" mdInput type="{{dynamictype}}" placeholder="Confirm Password" [(ngModel)]="confirmpwd" name="confirmpwd" required>
+                <md-icon mdSuffix class="mat-icon material-icons cursorPointer" role="img" aria-hidden="true" mdTooltip="Show Password" (mousedown)='showPWD()'
+                  style="color:gray">visibility</md-icon>
+              </md-input-container>
+            </div>
+            <div class="col-xs-12 col-sm-12">
+              <div class="row">
+                <button md-raised-button color="accent" [disabled]="!passwordForm.valid" class="full-width largeBtn" (click)="updatePassword(newpwd)">Update Password</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </md-card-content>
+    </md-card>
+  </md-grid-tile>
+</md-grid-list>

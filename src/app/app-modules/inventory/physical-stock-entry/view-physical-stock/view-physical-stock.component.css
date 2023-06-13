@@ -1,0 +1,50 @@
+.input-full-width {
+  width: 100%;
+}
+
+.box {
+  height: 60px;
+}
+
+.back-btn-container {
+  margin: -26px 15px 15px; 
+}
+
+.previous-btn {
+  margin: 12px 12px;
+}
+
+.m-b-40 {
+  margin-bottom: 40px !important;
+}
+
+@media screen and (max-width: 768px) {
+  .previous-btn {
+    width: 100%;
+  }
+}
+
+table {
+  width: 100%;
+  color: #52575C !important;
+}
+
+.full-width-view-records {
+  margin-bottom: 10px;
+  height: 35px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+  margin-left: 5px;
+}
+
+.button-view-records-disabled[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+h4 {
+  font-weight: bold;
+  color: #52575C !important;
+}
