@@ -127,7 +127,7 @@ export class MonthlyReportComponent implements OnInit {
   }
   exportToxlsx(criteria: any) {
     if (this.consumptionList.length > 0) {
-      let headers = ['slNo', 'month', 'year', 'facilityName', 'itemName', 'itemCategory', 'batchNo', 'unitCostPrice', 'expiryDate', 'openingStock', 'quantityReceived', 'dispensedQuantity', 'adjustmentReceipt', 'adjustmentIssue', 'closingStock'];
+      let headers = ['slNo', 'month', 'year', 'facilityName', 'itemName', 'itemCategory', 'batchNo', 'unitCostPrice', 'expiryDate', 'openingStock', 'quantityReceived', 'dispensedQuantity', 'adjustmentReceipt', 'adjustmentIssue', 'closingStock','itemEnteredDate'];
       let array = this.consumptionList.filter(function (obj) {
         for (var key in obj) {
           if (obj[key] == null) {
